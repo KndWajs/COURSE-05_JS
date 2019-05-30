@@ -1,0 +1,64 @@
+body {
+    display: flex;
+    flex-flow: wrap;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    background-color: #adb7bd;
+    height: 70px;
+    flex: 1 0 100%;
+    border-style: dashed;
+    border-block-color: red;
+}
+
+aside {
+    width: 300px;
+    border-style: dashed;
+    border-color: yellow;
+}
+
+section {
+    border-style: dashed;
+    border-color: pink;
+    flex: 1 0;
+}
+
+article {
+    
+}
+
+#logo {
+    width: 30%;
+    background-image: url('https://prowly-uploads.s3.eu-west-1.amazonaws.com/uploads/landing_page/template_background/21862/Capgemini_Spade_2COL_RGB.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60px;
+}
+
+#title {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: times, Times New Roman, times-roman, georgia, serif;
+    font-size: 28px;
+    line-height: 40px;
+    letter-spacing: -1px;
+    color: white;
+}
+
+#currentDate {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Hoefler Text', Georgia, 'Times New Roman', serif;
+    font-size: 1.75em;
+    letter-spacing: .2em;
+    line-height: 1.1em;
+    margin: 0px;
+    color: white;
+}

@@ -1,6 +1,7 @@
-import { calendar } from "./common/calendar"
+import { calendar } from "./common/calendar";
 import { hederController } from "./app/Header/controler"
 import { buttonView } from "./app/Button/view"
+import './styles/style.css'
 
 const initButton = buttonView().initButton
 const setHeaderColorRed = hederController().setHeaderColorRed

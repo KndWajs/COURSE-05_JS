@@ -1,4 +1,4 @@
-import { headerModel } from "./model"
+import { headerModel } from "../model"
 import { headerView } from "./view"
 
 const view = headerView()
