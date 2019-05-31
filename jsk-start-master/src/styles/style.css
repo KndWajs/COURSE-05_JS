@@ -10,25 +10,76 @@ header {
     background-color: #adb7bd;
     height: 70px;
     flex: 1 0 100%;
-    border-style: dashed;
-    border-block-color: red;
 }
 
 aside {
     width: 300px;
-    border-style: dashed;
-    border-color: yellow;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-left-color:#adb7bd;
+    padding: 10px;
+    padding-top: 20px;
+    font-family: times, Times New Roman, times-roman, georgia, serif;
+    text-transform: uppercase;
 }
 
 section {
-    border-style: dashed;
-    border-color: pink;
+    padding: 20px;
     flex: 1 0;
 }
 
-article {
-    
+article#calendar {
+    display: flex;
+    flex-flow: wrap;
+    flex: 1 100%;
 }
+
+.calendarWeek {
+    display: flex;
+    flex: 1 100%;
+}
+
+.calendarDay {
+    height: 50px;
+    margin: 5px;    
+    display: flex;
+    flex: 1 100%;
+    justify-content: center;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 20px;
+    border-color: rgb(218, 220, 224);
+    font-family: times, Times New Roman, times-roman, georgia, serif;
+}
+
+#currentDay {
+background-color: rgb(218, 220, 224);
+font-size: 1.2em;
+font-weight: bold;
+}
+
+.calendarDayHead {
+    display: flex;
+    flex: 1 100%;
+    justify-content: center;
+    align-items: flex-end;
+    font-family: times, Times New Roman, times-roman, georgia, serif;
+    text-transform: uppercase;
+}
+
+#calendarHeader {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    height: 50px;
+    flex: 1 0 100%;
+}
+
+#calendarHeader > div {
+    font-family: times, Times New Roman, times-roman, georgia, serif;
+    text-transform: uppercase;
+}
+
 
 #logo {
     width: 30%;
@@ -59,6 +110,5 @@ article {
     font-size: 1.75em;
     letter-spacing: .2em;
     line-height: 1.1em;
-    margin: 0px;
     color: white;
 }
