@@ -46,8 +46,12 @@ window.addEventListener('nextMonth-clicked', () => {
 window.addEventListener('currMonth-clicked', () => {
     initCalendar();
 });
-
-
+window.addEventListener('specificDay-clicked', (event) => {
+    view.clearDayEventsDiv();
+    if (events.has(parseInt(event.detail.dayNumber))) {
+        view.renderEvents(events.get(parseInt(event.detail.dayNumber)));
+    }    
+});
 
 
 
