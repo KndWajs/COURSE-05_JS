@@ -1,15 +1,11 @@
 let calendarDiv = document.getElementById("calendar");
 const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-export const setCurrentYearAndMonth = (visibleMonth, visibleYear) => {
-    document.getElementById("visibleMonth").innerText = (visibleMonth + 1) + ' / ' + visibleYear;
+const dayClicked = (event) => {
+    console.log('clicked on ' + event.currentTarget.innerText);
 }
 
-export const renderCalendar = (calendar, year, month) => {
-    calendarDiv.innerHTML = '';
-
-    let monthWeeks = calendar.monthDays(year, month);
-
+const createCalendarDays = () => {
     const weekElement = document.createElement("div");
     weekElement.className = 'calendarWeek';
     calendarDiv.appendChild(weekElement);
@@ -19,13 +15,31 @@ export const renderCalendar = (calendar, year, month) => {
         dayElement.className = 'calendarDayHead';
         weekElement.appendChild(dayElement);
     }
+}
 
+
+// exports
+
+export const renderCalendar = (calendar, year, month, events) => {
+    calendarDiv.innerHTML = '';
+
+    createCalendarDays();
+
+    let monthWeeks = calendar.monthDays(year, month);
     for (const week of monthWeeks) {
         const weekElement = document.createElement("div");
         weekElement.className = 'calendarWeek';
         for (const day of week) {
+            let dayId = year * 10000 + (month + 1) * 100 + day;
+            // console.log(dayId);
+            let numberOfEvents = '';
+            if (events.has(dayId)) {
+                console.log(events.get(dayId).length);
+                numberOfEvents = "events: " + events.get(dayId).length;
+                console.log(events.get(dayId));
+            }
             const dayElement = document.createElement("div");
-            dayElement.innerText = day > 0 ? day : '';
+            dayElement.innerHTML = day > 0 ? `${day} <div class="eventsNumber"> ${numberOfEvents}</div>` : '';
             dayElement.className = 'calendarDay';
             dayElement.onclick = dayClicked;
             if (year == new Date().getFullYear() && month == new Date().getMonth() && day == new Date().getDate()) {
@@ -37,9 +51,11 @@ export const renderCalendar = (calendar, year, month) => {
     }
 }
 
-const dayClicked = (event) => {
-    console.log('clicked on ' + event.currentTarget.innerText);
+export const setCurrentYearAndMonth = (visibleYear, visibleMonth) => {
+    document.getElementById("visibleMonth").innerText = (visibleMonth + 1) + ' / ' + visibleYear;
 }
+
+// listners
 
 const changeMonth = () => {
     const prevMonthButton = document.getElementById("prevMonth"),

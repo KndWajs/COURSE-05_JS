@@ -33,20 +33,27 @@ section {
 
 .calendarWeek {
     display: flex;
-    /* flex: 1 100%; */
 }
 
 .calendarDay {
     height: 50px;
     margin: 5px;    
     display: flex;
-    flex: 1 100%;
-    justify-content: center;
+    flex: 100%;
+    flex-flow: column;
+    justify-content: top;
+    align-items: center;
     border-style: solid;
     border-width: 1px;
     border-radius: 20px;
     border-color: rgb(218, 220, 224);
     font-family: times, Times New Roman, times-roman, georgia, serif;
+}
+
+.eventsNumber {
+    margin: 5px;    
+    font-family: times, Times New Roman, times-roman, georgia, serif;
+    color: blue; 
 }
 
 #currentDay {

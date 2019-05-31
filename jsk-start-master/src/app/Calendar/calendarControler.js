@@ -4,6 +4,7 @@ import * as view from "./calendarView"
 let calendar = model.calendar;
 let visibleMonth;
 let visibleYear;
+let events = new Map();
 
 const decrementMonth = () => {
     (visibleMonth == 0 ? visibleMonth = 11 : visibleMonth = visibleMonth - 1)
@@ -18,23 +19,29 @@ const incrementMonth = () => {
     }
 }
 
+const updateView = (visibleYear, visibleMonth) => {
+    events = model.getEvents(visibleYear, visibleMonth);
+    view.setCurrentYearAndMonth(visibleYear, visibleMonth);
+    view.renderCalendar(calendar, visibleYear, visibleMonth, events);
+}
+
 const initCalendar = () => {
     visibleMonth = new Date().getMonth();
     visibleYear = new Date().getFullYear();
-    view.setCurrentYearAndMonth(visibleMonth, visibleYear);
-    view.renderCalendar(calendar, visibleYear, visibleMonth);
+    updateView(visibleYear, visibleMonth);
 }
 initCalendar();
 
+
+// listners
+
 window.addEventListener('prevMonth-clicked', () => {
     decrementMonth();
-    view.setCurrentYearAndMonth(visibleMonth, visibleYear);
-    view.renderCalendar(calendar, visibleYear, visibleMonth);
+    updateView(visibleYear, visibleMonth);
 });
 window.addEventListener('nextMonth-clicked', () => {
     incrementMonth();
-    view.setCurrentYearAndMonth(visibleMonth, visibleYear);
-    view.renderCalendar(calendar, visibleYear, visibleMonth);
+    updateView(visibleYear, visibleMonth);
 });
 window.addEventListener('currMonth-clicked', () => {
     initCalendar();
