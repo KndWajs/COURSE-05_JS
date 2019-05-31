@@ -28,15 +28,12 @@ section {
     flex: 1 0;
 }
 
-article#calendar {
-    display: flex;
-    flex-flow: wrap;
-    flex: 1 100%;
-}
+/* article#calendar {
+} */
 
 .calendarWeek {
     display: flex;
-    flex: 1 100%;
+    /* flex: 1 100%; */
 }
 
 .calendarDay {

@@ -1,13 +1,14 @@
-const calendarDiv = document.getElementById("calendar");
+let calendarDiv = document.getElementById("calendar");
 const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-
 
 export const setCurrentYearAndMonth = (visibleMonth, visibleYear) => {
     document.getElementById("visibleMonth").innerText = (visibleMonth + 1) + ' / ' + visibleYear;
 }
 
-export const renderCalendar = (monthWeeks, month) => {
+export const renderCalendar = (calendar, year, month) => {
+    calendarDiv.innerHTML = '';
+
+    let monthWeeks = calendar.monthDays(year, month);
 
     const weekElement = document.createElement("div");
     weekElement.className = 'calendarWeek';
@@ -27,7 +28,7 @@ export const renderCalendar = (monthWeeks, month) => {
             dayElement.innerText = day > 0 ? day : '';
             dayElement.className = 'calendarDay';
             dayElement.onclick = dayClicked;
-            if (month == new Date().getMonth() && day == new Date().getDate()) {
+            if (year == new Date().getFullYear() && month == new Date().getMonth() && day == new Date().getDate()) {
                 dayElement.id = 'currentDay';
             }
             weekElement.appendChild(dayElement);
@@ -40,18 +41,30 @@ const dayClicked = (event) => {
     console.log('clicked on ' + event.currentTarget.innerText);
 }
 
-export const changeMonth = () => {
+const changeMonth = () => {
     const prevMonthButton = document.getElementById("prevMonth"),
-      nextMonthButton = document.getElementById("nextMonth");
+        nextMonthButton = document.getElementById("nextMonth"),
+        currMonthButton = document.getElementById("currMonth");
+
     prevMonthButton.addEventListener('click', () => {
-        console.log('sad');
-        return -1;
+        dispatchEvent(new CustomEvent('prevMonth-clicked', {
+            bubbles: true,
+            composed: true,
+        }));
     })
     nextMonthButton.addEventListener('click', () => {
-       console.log('sad2');
-        return 1;
+        dispatchEvent(new CustomEvent('nextMonth-clicked', {
+            bubbles: true,
+            composed: true,
+        }));
+    })
+    currMonthButton.addEventListener('click', () => {
+        dispatchEvent(new CustomEvent('currMonth-clicked', {
+            bubbles: true,
+            composed: true,
+        }));
     })
 }
-
+changeMonth();
 
 
