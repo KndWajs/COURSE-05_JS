@@ -1,5 +1,8 @@
-let calendarDiv = document.getElementById("calendar");
-let dayEventsDiv = document.getElementById("dayEvents");
+const calendarDiv = document.getElementById("calendar");
+const dayEventsDiv = document.getElementById("dayEvents");
+const todayEventsDiv = document.getElementById("todayEvents");
+const tomorrowEventsDiv = document.getElementById("tomorrowEvents");
+
 let pointedDay;
 const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -22,7 +25,45 @@ const getNumberOfEvents = (events, dayId) => {
     return '';
 }
 
+const renderSimplifiedEventView = (title, events, divDestination) => {
+    if (events == null ) {
+        const eventRender = `
+        <div>
+        <b>${title}</b>
+        <hr>
+        Nothing to do!<br>
+        </div>
+    `;
+        divDestination.insertAdjacentHTML('beforeend', eventRender);
+        
+    } else {
+        for (const event of events) {
+            const eventRender = `
+            <div>
+            <b>${title}</b>
+            <hr>
+            <b>Title:</b> ${event.title}<br><br>
+            <b>Place:</b> ${event.place}<br> 
+            </div>
+        `;
+            divDestination.insertAdjacentHTML('beforeend', eventRender);
+        }
+    }   
+}
+
 // exports
+
+export const clearApproachEventsDiv = () => {
+    todayEventsDiv.innerHTML = ' ';
+    tomorrowEventsDiv.innerHTML = ' ';
+}
+
+export const renderApproachEvents = (todayEvents, tomorrowEvents) => {
+    const todayTitle = 'Today events';
+    renderSimplifiedEventView(todayTitle, todayEvents, todayEventsDiv);
+    const tomorrowTitle = 'Tomorrow events';
+    renderSimplifiedEventView(tomorrowTitle, tomorrowEvents, tomorrowEventsDiv);
+}
 
 export const renderCalendar = (calendar, year, month, events) => {
     calendarDiv.innerHTML = '';
@@ -61,13 +102,11 @@ export const clearDayEventsDiv = () => {
 }
 
 export const renderEvents = (events) => {
-      
     for (const singleEvent of events) {
-
-        let members ='';
+        let members = '';
         for (var i = 0; i < singleEvent.members.length; i++) {
             members += singleEvent.members[i] + "<br>";
-          } 
+        }
 
         const singleEventRender = `
         Event ${singleEvent.id}<hr>

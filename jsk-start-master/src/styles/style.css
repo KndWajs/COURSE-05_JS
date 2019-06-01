@@ -21,6 +21,15 @@ aside {
     padding-top: 20px;
     font-family: times, Times New Roman, times-roman, georgia, serif;
     text-transform: uppercase;
+    text-align: center;
+}
+
+#todayEvents {
+    padding-top: 50px;
+}
+
+#tomorrowEvents {
+    padding-top: 50px;
 }
 
 section {
@@ -36,16 +45,36 @@ hr {
     border-width: 1px 0 0 0;
     border-radius: 15px;
 }
+
 hr:before {
     content: '';
     display: block;
     height: 30px;
-    margin-top: -31px;    
+    margin-top: -31px;
     border-style: solid;
     border-color: hsla(0, 0%, 75%, 0.9);
     border-width: 0 0 1px 0;
     border-radius: 15px;
-  }
+}
+
+button {
+    display: inline-block;
+    padding: 0.35em 1.2em;
+    border: 0.1em solid #FFFFFF;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 0.7em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #000000;
+    text-align: center;
+}
+
+button:hover {
+    color: #000000;
+    background-color: rgb(218, 220, 224);
+}
 
 .calendarWeek {
     display: flex;
@@ -73,7 +102,7 @@ hr:before {
 }
 
 .singleEventMembers {
-    text-align: center;  
+    text-align: center;
 }
 
 .calendarDay {

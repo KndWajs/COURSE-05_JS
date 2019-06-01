@@ -25,10 +25,18 @@ const updateView = (visibleYear, visibleMonth) => {
     view.renderCalendar(calendar, visibleYear, visibleMonth, events);
 }
 
+const renderApproachEvents = () => {
+    const todayEvents = events.get(visibleYear * 10000 + (visibleMonth + 1) * 100 + new Date().getDate());
+    const tomorrowEvents = events.get(visibleYear * 10000 + (visibleMonth + 1) * 100 + new Date().getDate() +1);
+    view.renderApproachEvents(todayEvents, tomorrowEvents);
+}
+
 const initCalendar = () => {
     visibleMonth = new Date().getMonth();
     visibleYear = new Date().getFullYear();
     updateView(visibleYear, visibleMonth);
+    view.clearApproachEventsDiv();
+    renderApproachEvents();
 }
 initCalendar();
 
@@ -50,7 +58,7 @@ window.addEventListener('specificDay-clicked', (event) => {
     view.clearDayEventsDiv();
     if (events.has(parseInt(event.detail.dayNumber))) {
         view.renderEvents(events.get(parseInt(event.detail.dayNumber)));
-    }    
+    }
 });
 
 
