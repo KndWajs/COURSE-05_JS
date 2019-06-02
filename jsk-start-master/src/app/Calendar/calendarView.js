@@ -1,3 +1,4 @@
+const DIFF_BETWEEN_JS_AND_HUMAN_MONTH = 1;
 const calendarDiv = document.getElementById("calendar");
 const dayEventsDiv = document.getElementById("dayEvents");
 const todayEventsDiv = document.getElementById("todayEvents");
@@ -19,14 +20,14 @@ const createCalendarDays = () => {
 }
 
 const getNumberOfEvents = (events, dayId) => {
-    if (events.has(dayId)) {
+    if (events.has(dayId) && events.get(dayId).length != 0) {
         return "events: " + events.get(dayId).length;
     }
     return '';
 }
 
 const renderSimplifiedEventView = (title, events, divDestination) => {
-    if (events == null ) {
+    if (events == null || events.length == 0) {
         const eventRender = `
         <div>
         <b>${title}</b>
@@ -35,20 +36,21 @@ const renderSimplifiedEventView = (title, events, divDestination) => {
         </div>
     `;
         divDestination.insertAdjacentHTML('beforeend', eventRender);
-        
     } else {
-        for (const event of events) {
+        for (var i = 0; i < events.length; i++) {
+            const event = events[i];
             const eventRender = `
             <div>
             <b>${title}</b>
             <hr>
+            <b>${i+1}</b><br><br>
             <b>Title:</b> ${event.title}<br><br>
-            <b>Place:</b> ${event.place}<br> 
+            <b>Place:</b> ${event.place}<br><br><br> 
             </div>
         `;
             divDestination.insertAdjacentHTML('beforeend', eventRender);
         }
-    }   
+    }
 }
 
 // exports
@@ -76,7 +78,7 @@ export const renderCalendar = (calendar, year, month, events) => {
         const weekElement = document.createElement("div");
         weekElement.className = 'calendarWeek';
         for (const day of week) {
-            let dayId = year * 10000 + (month + 1) * 100 + day;
+            let dayId = year * 10000 + (month + DIFF_BETWEEN_JS_AND_HUMAN_MONTH) * 100 + day;
             let numberOfEvents = getNumberOfEvents(events, dayId);
             const dayElement = document.createElement("div");
             dayElement.innerHTML = day > 0 ? `${day} <div class="eventsNumber"> ${numberOfEvents}</div>` : '';
@@ -84,8 +86,8 @@ export const renderCalendar = (calendar, year, month, events) => {
             dayElement.id = dayId;
             dayElement.onclick = dayClicked;
             if (year == new Date().getFullYear() && month == new Date().getMonth() && day == new Date().getDate()) {
-                dayElement.className = dayElement.className + " currentPointed";
                 pointedDay = dayElement;
+                dayElement.style.borderColor = 'black';
             }
             weekElement.appendChild(dayElement);
         }
@@ -94,22 +96,22 @@ export const renderCalendar = (calendar, year, month, events) => {
 }
 
 export const setCurrentYearAndMonth = (visibleYear, visibleMonth) => {
-    document.getElementById("visibleMonth").innerText = (visibleMonth + 1) + ' / ' + visibleYear;
+    document.getElementById("visibleMonth").innerText = (visibleMonth + DIFF_BETWEEN_JS_AND_HUMAN_MONTH) + ' / ' + visibleYear;
 }
 
 export const clearDayEventsDiv = () => {
     dayEventsDiv.innerHTML = ' ';
 }
 
-export const renderEvents = (events) => {
-    for (const singleEvent of events) {
+export const renderEvents = (events, dayId) => {
+    for (var i = 0; i < events.length; i++) {
+        const singleEvent = events[i];
         let members = '';
-        for (var i = 0; i < singleEvent.members.length; i++) {
-            members += singleEvent.members[i] + "<br>";
+        for (var j = 0; j < singleEvent.members.length; j++) {
+            members += singleEvent.members[j] + "<br>";
         }
-
         const singleEventRender = `
-        Event ${singleEvent.id}<hr>
+        Event ${i + 1} <button id="${i}${dayId}"">X</button><hr>
         <div class = "singleEvent">
         <div>
         <b>Title:</b> ${singleEvent.title}<br>
@@ -123,6 +125,8 @@ export const renderEvents = (events) => {
         </div>
     `;
         dayEventsDiv.insertAdjacentHTML('beforeend', singleEventRender);
+        document.getElementById(`${i}${dayId}`).onclick = deleteClicked;
+
     }
 }
 
@@ -154,6 +158,12 @@ const changeMonth = () => {
 }
 changeMonth();
 
+const deleteClicked = (event) => {
+    dispatchEvent(new CustomEvent('specificDayDelete-clicked', {
+        detail: { eventId: event.currentTarget.id },
+    }));
+}
+
 const dayClicked = (event) => {
     if (parseInt(event.currentTarget.id) % 100 == 0) {
         return;
@@ -167,5 +177,3 @@ const dayClicked = (event) => {
         detail: { dayNumber: event.currentTarget.id },
     }));
 }
-
-

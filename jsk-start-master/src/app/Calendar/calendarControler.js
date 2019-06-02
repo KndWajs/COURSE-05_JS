@@ -1,20 +1,27 @@
 import * as model from "./calendarModel"
 import * as view from "./calendarView"
 
+const DIFF_BETWEEN_JS_AND_HUMAN_MONTH = 1;
+const LAST_MONTH_NUMBER = 11;
+const FIRST_MONTH_NUMBER = 11;
+const ID_YEAR_FACTOR = 1e4;
+const ID_MONTH_FACTOR = 1e2;
+
+
 let calendar = model.calendar;
 let visibleMonth;
 let visibleYear;
 let events = new Map();
 
 const decrementMonth = () => {
-    (visibleMonth == 0 ? visibleMonth = 11 : visibleMonth = visibleMonth - 1)
-    if (visibleMonth === 11) {
+    (visibleMonth == FIRST_MONTH_NUMBER ? visibleMonth = LAST_MONTH_NUMBER : visibleMonth = visibleMonth - 1)
+    if (visibleMonth === LAST_MONTH_NUMBER) {
         visibleYear = visibleYear - 1;
     }
 }
 const incrementMonth = () => {
-    (visibleMonth == 11 ? visibleMonth = 0 : visibleMonth = visibleMonth + 1)
-    if (visibleMonth === 0) {
+    (visibleMonth == LAST_MONTH_NUMBER ? visibleMonth = FIRST_MONTH_NUMBER : visibleMonth = visibleMonth + 1)
+    if (visibleMonth === FIRST_MONTH_NUMBER) {
         visibleYear = visibleYear + 1;
     }
 }
@@ -26,8 +33,9 @@ const updateView = (visibleYear, visibleMonth) => {
 }
 
 const renderApproachEvents = () => {
-    const todayEvents = events.get(visibleYear * 10000 + (visibleMonth + 1) * 100 + new Date().getDate());
-    const tomorrowEvents = events.get(visibleYear * 10000 + (visibleMonth + 1) * 100 + new Date().getDate() +1);
+    const dayId = visibleYear * ID_YEAR_FACTOR + (visibleMonth + DIFF_BETWEEN_JS_AND_HUMAN_MONTH) * ID_MONTH_FACTOR + new Date().getDate();
+    const todayEvents = events.get(dayId);
+    const tomorrowEvents = events.get(dayId + 1);
     view.renderApproachEvents(todayEvents, tomorrowEvents);
 }
 
@@ -39,6 +47,14 @@ const initCalendar = () => {
     renderApproachEvents();
 }
 initCalendar();
+
+const renderSpecificDayEvents = (dayId) => {
+    view.clearDayEventsDiv();    
+    if (events.has(dayId) && events.get(dayId).size != 0) {
+        view.renderEvents(events.get(dayId), dayId);
+    }
+
+}
 
 
 // listners
@@ -55,19 +71,15 @@ window.addEventListener('currMonth-clicked', () => {
     initCalendar();
 });
 window.addEventListener('specificDay-clicked', (event) => {
-    view.clearDayEventsDiv();
-    if (events.has(parseInt(event.detail.dayNumber))) {
-        view.renderEvents(events.get(parseInt(event.detail.dayNumber)));
-    }
+    const dayId = parseInt(event.detail.dayNumber);
+    renderSpecificDayEvents(dayId);
 });
 
+window.addEventListener('specificDayDelete-clicked', (event) => {
+    model.deleteEvent(event.detail.eventId);
 
-
-
-
-
-
-
-
+    renderSpecificDayEvents(event.detail.eventId%1e8);
+    updateView(visibleYear, visibleMonth);
+});
 
 
