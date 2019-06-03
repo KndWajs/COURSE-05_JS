@@ -184,3 +184,40 @@ button:hover {
     line-height: 1.1em;
     color: white;
 }
+
+#addEvent {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    left: 50%;
+    top: 50%;
+    padding: 20px;
+    margin-left: -150px;
+    margin-top: -150px;
+    border-style: solid;
+    border-radius: 25px;
+    border-width: 1px;
+    border-color: #000000;
+    background-color: rgba(255, 255, 255, 0.9);
+    font-family: times, Times New Roman, times-roman, georgia, serif;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-flow: column;
+    /* visibility: hidden; */
+}
+
+#addEvent td {
+    height: 2.5em;
+    width: 90px;
+}
+#addEvent table {
+    margin-bottom: 20px;
+}
+
+#addEvent input {
+    width: 100%;
+}
+
+

@@ -28,22 +28,17 @@ const getNumberOfEvents = (events, dayId) => {
 
 const renderSimplifiedEventView = (title, events, divDestination) => {
     if (events == null || events.length == 0) {
-        const eventRender = `
-        <div>
-        <b>${title}</b>
-        <hr>
-        Nothing to do!<br>
-        </div>
-    `;
+        const eventRender = `<div><b>${title}</b><hr>Nothing to do!<br></div>`;
         divDestination.insertAdjacentHTML('beforeend', eventRender);
     } else {
+        const eventTitle = `<div><b>${title}</b></div><hr>`;
+        divDestination.insertAdjacentHTML('beforeend', eventTitle);
+
         for (var i = 0; i < events.length; i++) {
             const event = events[i];
-            const eventRender = `
+            const eventRender = `   
             <div>
-            <b>${title}</b>
-            <hr>
-            <b>${i+1}</b><br><br>
+            <b>${i + 1}</b><br><br>
             <b>Title:</b> ${event.title}<br><br>
             <b>Place:</b> ${event.place}<br><br><br> 
             </div>
@@ -111,7 +106,7 @@ export const renderEvents = (events, dayId) => {
             members += singleEvent.members[j] + "<br>";
         }
         const singleEventRender = `
-        Event ${i + 1} <button id="${i}${dayId}"">X</button><hr>
+        Event ${i + 1} <button id="${i}${dayId}">X</button><hr>
         <div class = "singleEvent">
         <div>
         <b>Title:</b> ${singleEvent.title}<br>
@@ -126,7 +121,6 @@ export const renderEvents = (events, dayId) => {
     `;
         dayEventsDiv.insertAdjacentHTML('beforeend', singleEventRender);
         document.getElementById(`${i}${dayId}`).onclick = deleteClicked;
-
     }
 }
 
@@ -157,6 +151,38 @@ const changeMonth = () => {
     })
 }
 changeMonth();
+
+const addEventSubmit = () => {
+    const addEventDiv = document.getElementById("addEvent");
+    document.getElementById(`addEventBtn`).onclick = () => {
+        addEventDiv.style.visibility = 'visible';
+        const defaultData = pointedDay.id.toString().replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
+        console.log(defaultData);
+        document.getElementById("eventDate").value = defaultData;
+    };
+
+    const addEventForm = document.getElementById("addEventForm");
+    addEventForm.onreset = () => {
+        addEventDiv.style.visibility = 'hidden';
+    };
+
+    addEventForm.onsubmit = (event) => {
+        event.preventDefault();
+        dispatchEvent(new CustomEvent('addEvent-submit', {
+            detail: {
+                title: document.getElementById("eventTitle").value,
+                date: document.getElementById("eventDate").value,
+                place: document.getElementById("eventPlace").value,
+                description: document.getElementById("eventDescription").value,
+                members: document.getElementById("eventMembers").value
+            },
+            bubbles: true,
+            composed: true,
+        }));
+        addEventDiv.style.visibility = 'hidden';
+    };
+}
+addEventSubmit();
 
 const deleteClicked = (event) => {
     dispatchEvent(new CustomEvent('specificDayDelete-clicked', {

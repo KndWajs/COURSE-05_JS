@@ -26,5 +26,14 @@ export const deleteEvent = (eventId) => {
     allEvents.get(eventId % ID_EVENT_FACTOR).splice(Math.trunc(eventId / ID_EVENT_FACTOR), 1);
 }
 
+export const addEvent = (dayId, event) => {
+    let dayEvents = [];
+    if (allEvents.has(dayId)) {
+        dayEvents = allEvents.get(dayId);
+    }
+    dayEvents.push(event);
+    allEvents.set(dayId, dayEvents);
+}
+
 
 

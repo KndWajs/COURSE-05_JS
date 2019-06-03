@@ -20,6 +20,7 @@
     <section>
         <div id='calendarHeader'>
             <button id="prevMonth"> &lt;&lt;&lt; PREVIOUS MONTH</button>
+            <button id="addEventBtn">+ ADD EVENT</button>
             <button id="currMonth">TODAY</button>
             <div id="visibleMonth"></div>
             <button id="nextMonth">NEXT MONTH &gt;&gt;&gt; </button>
@@ -30,8 +31,39 @@
     <aside>
         <div id="todayEvents"></div>
         <div id="tomorrowEvents"></div>
-        
+
     </aside>
+
+    <div id="addEvent">
+        Add Event
+        <form id="addEventForm">
+            <table id="addEventTable">
+                <tr>
+                    <td>Title:</td>
+                    <td><input id="eventTitle" type="text" required placeholder="Field required"></td>
+                </tr>
+                <tr>
+                    <td>Date:</td>
+                    <td><input id="eventDate" type="date" required></td>
+                </tr>
+                <tr>
+                    <td>Place:</td>
+                    <td><input id="eventPlace" type="text" field="" required placeholder="Field required" required></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Description:<br>
+                        <input id="eventDescription" type="text"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Members:</td>
+                    <td><input id="eventMembers" type="text"></td>
+                </tr>
+            </table>
+            <button type="submit">add event</button>
+            <button type="reset" id="hideAddEvent">cancel</button>
+        </form>
+    </div>
 
 </body>
 

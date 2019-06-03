@@ -3,7 +3,7 @@ import * as view from "./calendarView"
 
 const DIFF_BETWEEN_JS_AND_HUMAN_MONTH = 1;
 const LAST_MONTH_NUMBER = 11;
-const FIRST_MONTH_NUMBER = 11;
+const FIRST_MONTH_NUMBER = 1;
 const ID_YEAR_FACTOR = 1e4;
 const ID_MONTH_FACTOR = 1e2;
 
@@ -56,7 +56,6 @@ const renderSpecificDayEvents = (dayId) => {
 
 }
 
-
 // listners
 
 window.addEventListener('prevMonth-clicked', () => {
@@ -77,9 +76,22 @@ window.addEventListener('specificDay-clicked', (event) => {
 
 window.addEventListener('specificDayDelete-clicked', (event) => {
     model.deleteEvent(event.detail.eventId);
-
-    renderSpecificDayEvents(event.detail.eventId%1e8);
     updateView(visibleYear, visibleMonth);
+    renderSpecificDayEvents(event.detail.eventId%1e8);
+    view.clearApproachEventsDiv();
+    renderApproachEvents();
 });
 
-
+window.addEventListener('addEvent-submit', (event) => {
+    const dayId = parseInt(event.detail.date.replace(/-/g, ''));
+    const newEvent = {
+        title: event.detail.title,
+        place: event.detail.place,
+        description: event.detail.description,
+        members: [event.detail.members],
+    }
+    model.addEvent(dayId, newEvent);
+    updateView(visibleYear, visibleMonth);
+    view.clearApproachEventsDiv();
+    renderApproachEvents();
+});
