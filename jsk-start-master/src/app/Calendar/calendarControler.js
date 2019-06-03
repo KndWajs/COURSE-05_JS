@@ -6,6 +6,9 @@ const LAST_MONTH_NUMBER = 11;
 const FIRST_MONTH_NUMBER = 1;
 const ID_YEAR_FACTOR = 1e4;
 const ID_MONTH_FACTOR = 1e2;
+const CURRENT_YEAR = new Date().getFullYear();
+const CURRENT_MONTH = new Date().getMonth();
+const CURRENT_DAY = new Date().getDate();
 
 
 let calendar = model.calendar;
@@ -33,17 +36,18 @@ const updateView = (visibleYear, visibleMonth) => {
 }
 
 const renderApproachEvents = () => {
-    const dayId = visibleYear * ID_YEAR_FACTOR + (visibleMonth + DIFF_BETWEEN_JS_AND_HUMAN_MONTH) * ID_MONTH_FACTOR + new Date().getDate();
+    view.clearApproachEventsDiv();
+    const events = model.getEvents(CURRENT_YEAR, CURRENT_MONTH);
+    const dayId = CURRENT_YEAR * ID_YEAR_FACTOR + (CURRENT_MONTH + DIFF_BETWEEN_JS_AND_HUMAN_MONTH) * ID_MONTH_FACTOR + CURRENT_DAY;
     const todayEvents = events.get(dayId);
     const tomorrowEvents = events.get(dayId + 1);
     view.renderApproachEvents(todayEvents, tomorrowEvents);
 }
 
 const initCalendar = () => {
-    visibleMonth = new Date().getMonth();
-    visibleYear = new Date().getFullYear();
+    visibleYear = CURRENT_YEAR;
+    visibleMonth = CURRENT_MONTH;
     updateView(visibleYear, visibleMonth);
-    view.clearApproachEventsDiv();
     renderApproachEvents();
 }
 initCalendar();
@@ -78,8 +82,7 @@ window.addEventListener('specificDayDelete-clicked', (event) => {
     model.deleteEvent(event.detail.eventId);
     updateView(visibleYear, visibleMonth);
     renderSpecificDayEvents(event.detail.eventId%1e8);
-    view.clearApproachEventsDiv();
-    renderApproachEvents();
+    renderApproachEvents();    
 });
 
 window.addEventListener('addEvent-submit', (event) => {
@@ -92,6 +95,5 @@ window.addEventListener('addEvent-submit', (event) => {
     }
     model.addEvent(dayId, newEvent);
     updateView(visibleYear, visibleMonth);
-    view.clearApproachEventsDiv();
     renderApproachEvents();
 });

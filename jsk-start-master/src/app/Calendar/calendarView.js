@@ -64,7 +64,6 @@ export const renderApproachEvents = (todayEvents, tomorrowEvents) => {
 
 export const renderCalendar = (calendar, year, month, events) => {
     calendarDiv.innerHTML = '';
-    dayEventsDiv.style.visibility = 'hidden';
 
     createCalendarDays();
 
@@ -132,21 +131,21 @@ const changeMonth = () => {
         currMonthButton = document.getElementById("currMonth");
 
     prevMonthButton.addEventListener('click', () => {
+        dayEventsDiv.style.visibility = 'hidden';
         dispatchEvent(new CustomEvent('prevMonth-clicked', {
             bubbles: true,
-            composed: true,
         }));
     })
     nextMonthButton.addEventListener('click', () => {
+        dayEventsDiv.style.visibility = 'hidden';
         dispatchEvent(new CustomEvent('nextMonth-clicked', {
             bubbles: true,
-            composed: true,
         }));
     })
     currMonthButton.addEventListener('click', () => {
+        dayEventsDiv.style.visibility = 'hidden';
         dispatchEvent(new CustomEvent('currMonth-clicked', {
             bubbles: true,
-            composed: true,
         }));
     })
 }
@@ -157,7 +156,6 @@ const addEventSubmit = () => {
     document.getElementById(`addEventBtn`).onclick = () => {
         addEventDiv.style.visibility = 'visible';
         const defaultData = pointedDay.id.toString().replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
-        console.log(defaultData);
         document.getElementById("eventDate").value = defaultData;
     };
 
@@ -177,7 +175,6 @@ const addEventSubmit = () => {
                 members: document.getElementById("eventMembers").value
             },
             bubbles: true,
-            composed: true,
         }));
         addEventDiv.style.visibility = 'hidden';
     };
