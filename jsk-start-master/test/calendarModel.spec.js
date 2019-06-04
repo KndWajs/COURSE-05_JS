@@ -1,8 +1,11 @@
 import * as model from "../src/app/Calendar/calendarModel"
+import * as data from "../src/app/Calendar/data"
 
 describe("calendarModel", () => {
     it("should return map with four days when get events from fifth month", () => {
         // given
+        data.initDataBase();
+
         const year = 2019;
         const month = 6;
 
@@ -108,7 +111,7 @@ describe("calendarModel", () => {
     it("should return one event when add one to empty day", () => {
         // given
         const year = 2019;
-        const month = 6;        
+        const month = 6;
         const dayId = 20190625;
         const newEvent = {
             title: "test title",
@@ -173,7 +176,7 @@ describe("calendarModel", () => {
 
     it("should throw error when dayId is wrong", () => {
         // given
-        const dayId = 20190655;        
+        const dayId = 20190655;
         const newEvent = {
             title: "test title",
             place: "",
@@ -194,3 +197,7 @@ describe("calendarModel", () => {
     })
 
 })
+
+
+
+

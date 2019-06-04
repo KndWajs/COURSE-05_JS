@@ -5,7 +5,9 @@ const FIRST_DAY = 1;
 const ID_YEAR_FACTOR = 1e4;
 const ID_MONTH_FACTOR = 1e2;
 
-let allEvents = data.sampleDataMap;
+if (localStorage == null) {
+    data.initDataBase();
+}
 
 export const calendar = new Calendar(FIRST_DAY);
 
@@ -15,7 +17,7 @@ const validateYear = (year) => {
     }
 }
 const validateMonth = (month) => {
-    if (month < 0 || month > 11) {
+    if (month < 1 || month > 12) {
         throw new Error('InvalidMonthNo');
     }
 }
@@ -31,19 +33,21 @@ export const getEvents = (year, month) => {
 
     let allEventsInMonth = new Map();
     let monthId = year * ID_YEAR_FACTOR + (month) * ID_MONTH_FACTOR;
-    for (const eventDate of allEvents.keys()) {
-        if (monthId / ID_MONTH_FACTOR == Math.trunc(eventDate / ID_MONTH_FACTOR)) {
-            allEventsInMonth.set(eventDate, allEvents.get(eventDate));
+    for (var i = 0; i < localStorage.length; i++) {
+        if (monthId / ID_MONTH_FACTOR == Math.trunc(localStorage.key(i) / ID_MONTH_FACTOR)) {
+            allEventsInMonth.set(parseInt(localStorage.key(i)), JSON.parse(localStorage.getItem(localStorage.key(i))));
         }
     }
     return allEventsInMonth;
 }
 
 export const deleteEvent = (dayId, eventIndex) => {
-    if (!allEvents.has(dayId) || allEvents.get(dayId).length <= eventIndex) {
+    if (localStorage.getItem(dayId) == null || JSON.parse(localStorage.getItem(dayId)).length <= eventIndex) {
         throw new Error('ThereIsNoEventWithSpecifiedId');
     }
-    allEvents.get(dayId).splice(eventIndex, 1);
+    let items = JSON.parse(localStorage.getItem(dayId));
+    items.splice(eventIndex, 1);
+    localStorage.setItem(dayId, JSON.stringify(items));
 }
 
 export const addEvent = (dayId, event) => {
@@ -59,11 +63,11 @@ export const addEvent = (dayId, event) => {
     }
 
     let dayEvents = [];
-    if (allEvents.has(dayId)) {
-        dayEvents = allEvents.get(dayId);
+    if (localStorage.getItem(dayId) != null ) {
+        dayEvents = JSON.parse(localStorage.getItem(dayId));
     }
     dayEvents.push(event);
-    allEvents.set(dayId, dayEvents);
+    localStorage.setItem(dayId, JSON.stringify(dayEvents));
 }
 
 

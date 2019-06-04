@@ -7,6 +7,8 @@ const FIRST_MONTH_NUMBER = 1;
 const ID_YEAR_FACTOR = 1e4;
 const ID_MONTH_FACTOR = 1e2;
 
+
+
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth() + DIFF_BETWEEN_JS_AND_HUMAN_MONTH;
 const currentDay = new Date().getDate();
@@ -38,7 +40,6 @@ const updateView = (visibleYear, visibleMonth) => {
 }
 
 const renderApproachEvents = () => {
-    const events = model.getEvents(currentYear, currentMonth);
     const dayId = currentYear * ID_YEAR_FACTOR + currentMonth * ID_MONTH_FACTOR + currentDay;
     const todayEvents = events.get(dayId);
     const tomorrowEvents = events.get(dayId + 1);
