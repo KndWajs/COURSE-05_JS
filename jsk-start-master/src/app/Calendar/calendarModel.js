@@ -4,10 +4,6 @@ import * as calendarConst from "./calendarConst"
 
 const FIRST_DAY = 1;
 
-if (localStorage == null) {
-    data.initDataBase();
-}
-
 export const calendar = new Calendar(FIRST_DAY);
 
 const validateYear = (year) => {
@@ -27,6 +23,11 @@ const validateDay = (day) => {
 }
 
 export const getEvents = (year, month) => {
+    console.log((window.localStorage))
+    if (localStorage == null || localStorage.length == 0) {
+        data.initDataBase();
+    }
+
     validateYear(year);
     validateMonth(month);
 

@@ -49,6 +49,12 @@ const renderSimplifiedEventView = (title, events, divDestination) => {
     }
 }
 
+const pointCurrentDay = (preparedDayId) => {
+    const currentDay = document.getElementById(preparedDayId + new Date().getDate());
+    currentDay.style.borderColor = 'black';
+    pointedDay = currentDay;
+}
+
 // exports
 
 export const renderApproachEvents = (todayEvents, tomorrowEvents) => {
@@ -84,10 +90,9 @@ export const renderCalendar = (calendar, year, month, events) => {
         }
         calendarDiv.appendChild(weekElement);
     }
+    
     if (year == new Date().getFullYear() && month == new Date().getMonth() + calendarConst.DIFF_BETWEEN_JS_AND_HUMAN_MONTH) {
-        const currentDay = document.getElementById(preparedDayId + new Date().getDate());
-        currentDay.style.borderColor = 'black';
-        pointedDay = currentDay;
+       pointCurrentDay(preparedDayId);
     }
 }
 
