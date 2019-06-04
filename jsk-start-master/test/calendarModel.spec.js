@@ -4,7 +4,7 @@ describe("calendarModel", () => {
     it("should return map with four days when get events from fifth month", () => {
         // given
         const year = 2019;
-        const month = 5;
+        const month = 6;
 
         // when
         const daysWithEvents = model.getEvents(year, month);
@@ -52,27 +52,29 @@ describe("calendarModel", () => {
     it("should return one event when delete one of two events", () => {
         // given
         const year = 2019;
-        const month = 5;
-        const eventId = "020190605";
+        const month = 6;
+        const dayId = 20190605;
+        const eventIndex = 0;
 
         // when
-        model.deleteEvent(eventId);
+        model.deleteEvent(dayId, eventIndex);
         const daysWithEvents = model.getEvents(year, month);
-        const eventsInSpecificDay = daysWithEvents.get(20190605);
+        const eventsInSpecificDay = daysWithEvents.get(dayId);
 
         // then
         expect(daysWithEvents.size).toEqual(4);
         expect(eventsInSpecificDay.length).toEqual(1);
     })
 
-    it("should throw error when eventId point to non existing event", () => {
+    it("should throw error when eventIndex point to non existing event", () => {
         // given
-        const eventId = "320190605";
+        const dayId = 20190605;
+        const eventIndex = 3;
 
         // when
         let message = '';
         try {
-            model.deleteEvent(eventId);
+            model.deleteEvent(dayId, eventIndex);
         } catch (e) {
             message = e.message;
         }
@@ -84,7 +86,7 @@ describe("calendarModel", () => {
     it("should return two events when add one to two events in specific day", () => {
         // given
         const year = 2019;
-        const month = 5;
+        const month = 6;
         const dayId = 20190605;
         const newEvent = {
             title: "test title",
@@ -106,7 +108,7 @@ describe("calendarModel", () => {
     it("should return one event when add one to empty day", () => {
         // given
         const year = 2019;
-        const month = 5;
+        const month = 6;        
         const dayId = 20190625;
         const newEvent = {
             title: "test title",

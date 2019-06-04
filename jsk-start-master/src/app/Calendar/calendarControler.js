@@ -2,13 +2,14 @@ import * as model from "./calendarModel"
 import * as view from "./calendarView"
 
 const DIFF_BETWEEN_JS_AND_HUMAN_MONTH = 1;
-const LAST_MONTH_NUMBER = 11;
+const LAST_MONTH_NUMBER = 12;
 const FIRST_MONTH_NUMBER = 1;
 const ID_YEAR_FACTOR = 1e4;
 const ID_MONTH_FACTOR = 1e2;
-const CURRENT_YEAR = new Date().getFullYear();
-const CURRENT_MONTH = new Date().getMonth();
-const CURRENT_DAY = new Date().getDate();
+
+const currentYear = new Date().getFullYear();
+const currentMonth = new Date().getMonth() + DIFF_BETWEEN_JS_AND_HUMAN_MONTH;
+const currentDay = new Date().getDate();
 
 
 let calendar = model.calendar;
@@ -33,27 +34,27 @@ const updateView = (visibleYear, visibleMonth) => {
     events = model.getEvents(visibleYear, visibleMonth);
     view.setCurrentYearAndMonth(visibleYear, visibleMonth);
     view.renderCalendar(calendar, visibleYear, visibleMonth, events);
+    view.clearDayEventsDiv();
 }
 
 const renderApproachEvents = () => {
-    view.clearApproachEventsDiv();
-    const events = model.getEvents(CURRENT_YEAR, CURRENT_MONTH);
-    const dayId = CURRENT_YEAR * ID_YEAR_FACTOR + (CURRENT_MONTH + DIFF_BETWEEN_JS_AND_HUMAN_MONTH) * ID_MONTH_FACTOR + CURRENT_DAY;
+    const events = model.getEvents(currentYear, currentMonth);
+    const dayId = currentYear * ID_YEAR_FACTOR + currentMonth * ID_MONTH_FACTOR + currentDay;
     const todayEvents = events.get(dayId);
     const tomorrowEvents = events.get(dayId + 1);
     view.renderApproachEvents(todayEvents, tomorrowEvents);
 }
 
 const initCalendar = () => {
-    visibleYear = CURRENT_YEAR;
-    visibleMonth = CURRENT_MONTH;
+    visibleYear = currentYear;
+    visibleMonth = currentMonth;
     updateView(visibleYear, visibleMonth);
     renderApproachEvents();
 }
 initCalendar();
 
 const renderSpecificDayEvents = (dayId) => {
-    view.clearDayEventsDiv();    
+    view.clearDayEventsDiv();
     if (events.has(dayId) && events.get(dayId).size != 0) {
         view.renderEvents(events.get(dayId), dayId);
     }
@@ -62,15 +63,15 @@ const renderSpecificDayEvents = (dayId) => {
 
 // listners
 
-window.addEventListener('prevMonth-clicked', () => {
+window.addEventListener('prevMonthBtn-clicked', () => {
     decrementMonth();
     updateView(visibleYear, visibleMonth);
 });
-window.addEventListener('nextMonth-clicked', () => {
+window.addEventListener('nextMonthBtn-clicked', () => {
     incrementMonth();
     updateView(visibleYear, visibleMonth);
 });
-window.addEventListener('currMonth-clicked', () => {
+window.addEventListener('currMonthBtn-clicked', () => {
     initCalendar();
 });
 window.addEventListener('specificDay-clicked', (event) => {
@@ -79,13 +80,14 @@ window.addEventListener('specificDay-clicked', (event) => {
 });
 
 window.addEventListener('specificDayDelete-clicked', (event) => {
-    model.deleteEvent(event.detail.eventId);
+    model.deleteEvent(event.detail.dayId, event.detail.eventIndex);
     updateView(visibleYear, visibleMonth);
-    renderSpecificDayEvents(event.detail.eventId%1e8);
-    renderApproachEvents();    
+    renderSpecificDayEvents(event.detail.dayId);
+    renderApproachEvents();
 });
 
 window.addEventListener('addEvent-submit', (event) => {
+    console.log(event.detail.date)
     const dayId = parseInt(event.detail.date.replace(/-/g, ''));
     const newEvent = {
         title: event.detail.title,

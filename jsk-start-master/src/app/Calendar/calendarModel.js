@@ -2,8 +2,6 @@ import { Calendar } from "calendar"
 import * as data from "./data"
 
 const FIRST_DAY = 1;
-const DIFF_BETWEEN_JS_AND_HUMAN_MONTH = 1;
-const ID_EVENT_FACTOR = 1e8;
 const ID_YEAR_FACTOR = 1e4;
 const ID_MONTH_FACTOR = 1e2;
 
@@ -32,7 +30,7 @@ export const getEvents = (year, month) => {
     validateMonth(month);
 
     let allEventsInMonth = new Map();
-    let monthId = year * ID_YEAR_FACTOR + (month + DIFF_BETWEEN_JS_AND_HUMAN_MONTH) * ID_MONTH_FACTOR;
+    let monthId = year * ID_YEAR_FACTOR + (month) * ID_MONTH_FACTOR;
     for (const eventDate of allEvents.keys()) {
         if (monthId / ID_MONTH_FACTOR == Math.trunc(eventDate / ID_MONTH_FACTOR)) {
             allEventsInMonth.set(eventDate, allEvents.get(eventDate));
@@ -41,12 +39,11 @@ export const getEvents = (year, month) => {
     return allEventsInMonth;
 }
 
-export const deleteEvent = (eventId) => {
-    if (!allEvents.has(eventId % ID_EVENT_FACTOR) || allEvents.get(eventId % ID_EVENT_FACTOR).length < (Math.trunc(eventId / ID_EVENT_FACTOR))) {
+export const deleteEvent = (dayId, eventIndex) => {
+    if (!allEvents.has(dayId) || allEvents.get(dayId).length <= eventIndex) {
         throw new Error('ThereIsNoEventWithSpecifiedId');
     }
-
-    allEvents.get(eventId % ID_EVENT_FACTOR).splice(Math.trunc(eventId / ID_EVENT_FACTOR), 1);
+    allEvents.get(dayId).splice(eventIndex, 1);
 }
 
 export const addEvent = (dayId, event) => {

@@ -3,40 +3,6 @@ body {
     flex-flow: wrap;
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-content: center;
-    background-color: #adb7bd;
-    height: 70px;
-    flex: 1 0 100%;
-}
-
-aside {
-    width: 300px;
-    border-left-style: solid;
-    border-left-width: 1px;
-    border-left-color: #adb7bd;
-    padding: 10px;
-    padding-top: 20px;
-    font-family: times, Times New Roman, times-roman, georgia, serif;
-    text-transform: uppercase;
-    text-align: center;
-}
-
-#todayEvents {
-    padding-top: 50px;
-}
-
-#tomorrowEvents {
-    padding-top: 50px;
-}
-
-section {
-    padding: 20px;
-    flex: 1 0;
-}
-
 hr {
     width: 100%;
     height: 30px;
@@ -76,81 +42,15 @@ button:hover {
     background-color: rgb(218, 220, 224);
 }
 
-.calendarWeek {
+
+/* header style */
+header {
     display: flex;
-}
-
-#dayEvents {
-    margin: 50px;
-    visibility: hidden;
-    font-family: times, Times New Roman, times-roman, georgia, serif;
-    text-transform: uppercase;
-    text-align: center;
-}
-
-.singleEvent {
-    font-family: 'Hoefler Text', Georgia, 'Times New Roman', serif;
-    font-size: 1em;
-    letter-spacing: .2em;
-    line-height: 3em;
-    text-transform: none;
-    text-align: left;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    margin-bottom: 50px;
-}
-
-.singleEventMembers {
-    text-align: center;
-}
-
-.calendarDay {
-    height: 50px;
-    margin: 5px;
-    display: flex;
-    flex: 100%;
-    flex-flow: column;
-    justify-content: top;
-    align-items: center;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 20px;
-    border-color: rgb(218, 220, 224);
-    font-family: times, Times New Roman, times-roman, georgia, serif;
-}
-
-.eventsNumber {
-    margin: 5px;
-    font-family: times, Times New Roman, times-roman, georgia, serif;
-    color: blue;
-}
-
-.currentPointed {
-    background-color: rgb(218, 220, 224);
-    font-size: 1.1em;
-}
-
-.calendarDayHead {
-    display: flex;
-    flex: 1 100%;
-    justify-content: center;
-    align-items: flex-end;
-    font-family: times, Times New Roman, times-roman, georgia, serif;
-    text-transform: uppercase;
-}
-
-#calendarHeader {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-    height: 50px;
+    justify-content: space-between;
+    align-content: center;
+    background-color: #adb7bd;
+    height: 70px;
     flex: 1 0 100%;
-}
-
-#calendarHeader>div {
-    font-family: times, Times New Roman, times-roman, georgia, serif;
-    text-transform: uppercase;
 }
 
 #logo {
@@ -185,6 +85,115 @@ button:hover {
     color: white;
 }
 
+
+/* aside view with simplified approach events */
+aside {
+    width: 300px;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-left-color: #adb7bd;
+    padding: 10px;
+    padding-top: 20px;
+    font-family: times, Times New Roman, times-roman, georgia, serif;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+#todayEvents {
+    padding-top: 50px;
+}
+
+#tomorrowEvents {
+    padding-top: 50px;
+}
+
+
+/* calendar style */
+section {
+    padding: 20px;
+    flex: 1 0;
+}
+
+#calendarHeader {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    height: 50px;
+    flex: 1 0 100%;
+}
+
+#calendarHeader>div {
+    font-family: times, Times New Roman, times-roman, georgia, serif;
+    text-transform: uppercase;
+}
+
+.calendarDayHead {
+    display: flex;
+    flex: 1 100%;
+    justify-content: center;
+    align-items: flex-end;
+    font-family: times, Times New Roman, times-roman, georgia, serif;
+    text-transform: uppercase;
+}
+
+.calendarWeek {
+    display: flex;
+}
+
+.calendarDay {
+    height: 50px;
+    margin: 5px;
+    display: flex;
+    flex: 100%;
+    flex-flow: column;
+    justify-content: top;
+    align-items: center;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 20px;
+    border-color: rgb(218, 220, 224);
+    font-family: times, Times New Roman, times-roman, georgia, serif;
+}
+
+.eventsNumber {
+    margin: 5px;
+    font-family: times, Times New Roman, times-roman, georgia, serif;
+    color: blue;
+}
+
+.currentPointed {
+    background-color: rgb(218, 220, 224);
+    font-size: 1.1em;
+}
+
+/* single day events */
+#dayEvents {
+    margin: 50px;
+    visibility: hidden;
+    font-family: times, Times New Roman, times-roman, georgia, serif;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.singleEvent {
+    font-family: 'Hoefler Text', Georgia, 'Times New Roman', serif;
+    font-size: 1em;
+    letter-spacing: .2em;
+    line-height: 3em;
+    text-transform: none;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 50px;
+}
+
+.singleEventMembers {
+    text-align: center;
+}
+
+
+/* Add event style */
 #addEvent {
     position: fixed;
     width: 300px;
@@ -212,6 +221,7 @@ button:hover {
     height: 2.5em;
     width: 90px;
 }
+
 #addEvent table {
     margin-bottom: 20px;
 }
@@ -219,5 +229,3 @@ button:hover {
 #addEvent input {
     width: 100%;
 }
-
-

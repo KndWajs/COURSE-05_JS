@@ -1,4 +1,7 @@
 const DIFF_BETWEEN_JS_AND_HUMAN_MONTH = 1;
+const ID_YEAR_FACTOR = 1e4;
+const ID_MONTH_FACTOR = 1e2;
+
 const calendarDiv = document.getElementById("calendar");
 const dayEventsDiv = document.getElementById("dayEvents");
 const todayEventsDiv = document.getElementById("todayEvents");
@@ -7,7 +10,7 @@ const tomorrowEventsDiv = document.getElementById("tomorrowEvents");
 let pointedDay;
 const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-const createCalendarDays = () => {
+const createCalendarDayNames = () => {
     const weekElement = document.createElement("div");
     weekElement.className = 'calendarWeek';
     calendarDiv.appendChild(weekElement);
@@ -50,47 +53,48 @@ const renderSimplifiedEventView = (title, events, divDestination) => {
 
 // exports
 
-export const clearApproachEventsDiv = () => {
+export const renderApproachEvents = (todayEvents, tomorrowEvents) => {
     todayEventsDiv.innerHTML = ' ';
     tomorrowEventsDiv.innerHTML = ' ';
-}
 
-export const renderApproachEvents = (todayEvents, tomorrowEvents) => {
     const todayTitle = 'Today events';
     renderSimplifiedEventView(todayTitle, todayEvents, todayEventsDiv);
+    
     const tomorrowTitle = 'Tomorrow events';
     renderSimplifiedEventView(tomorrowTitle, tomorrowEvents, tomorrowEventsDiv);
 }
 
 export const renderCalendar = (calendar, year, month, events) => {
     calendarDiv.innerHTML = '';
-
-    createCalendarDays();
-
-    let monthWeeks = calendar.monthDays(year, month);
+    createCalendarDayNames();
+    const preparedDayId = year * ID_YEAR_FACTOR + month * ID_MONTH_FACTOR;
+    let monthWeeks = calendar.monthDays(year, month - DIFF_BETWEEN_JS_AND_HUMAN_MONTH);
     for (const week of monthWeeks) {
         const weekElement = document.createElement("div");
         weekElement.className = 'calendarWeek';
         for (const day of week) {
-            let dayId = year * 10000 + (month + DIFF_BETWEEN_JS_AND_HUMAN_MONTH) * 100 + day;
-            let numberOfEvents = getNumberOfEvents(events, dayId);
             const dayElement = document.createElement("div");
-            dayElement.innerHTML = day > 0 ? `${day} <div class="eventsNumber"> ${numberOfEvents}</div>` : '';
             dayElement.className = 'calendarDay';
-            dayElement.id = dayId;
-            dayElement.onclick = dayClicked;
-            if (year == new Date().getFullYear() && month == new Date().getMonth() && day == new Date().getDate()) {
-                pointedDay = dayElement;
-                dayElement.style.borderColor = 'black';
+            if (day > 0) {
+                let dayId = preparedDayId + day;
+                let numberOfEvents = getNumberOfEvents(events, dayId);
+                dayElement.innerHTML = day > 0 ? `${day} <div class="eventsNumber"> ${numberOfEvents}</div>` : '';
+                dayElement.id = dayId;
+                dayElement.onclick = dayClicked;
             }
             weekElement.appendChild(dayElement);
         }
         calendarDiv.appendChild(weekElement);
     }
+    if (year == new Date().getFullYear() && month == new Date().getMonth() + DIFF_BETWEEN_JS_AND_HUMAN_MONTH) {
+        const currentDay = document.getElementById(preparedDayId + new Date().getDate());
+        currentDay.style.borderColor = 'black';
+        pointedDay = currentDay;
+    }
 }
 
 export const setCurrentYearAndMonth = (visibleYear, visibleMonth) => {
-    document.getElementById("visibleMonth").innerText = (visibleMonth + DIFF_BETWEEN_JS_AND_HUMAN_MONTH) + ' / ' + visibleYear;
+    document.getElementById("visibleMonth").innerText = visibleMonth + ' / ' + visibleYear;
 }
 
 export const clearDayEventsDiv = () => {
@@ -98,14 +102,14 @@ export const clearDayEventsDiv = () => {
 }
 
 export const renderEvents = (events, dayId) => {
-    for (var i = 0; i < events.length; i++) {
-        const singleEvent = events[i];
+    for (var eventIndex = 0; eventIndex < events.length; eventIndex++) {
+        const singleEvent = events[eventIndex];
         let members = '';
         for (var j = 0; j < singleEvent.members.length; j++) {
             members += singleEvent.members[j] + "<br>";
         }
         const singleEventRender = `
-        Event ${i + 1} <button id="${i}${dayId}">X</button><hr>
+        Event ${eventIndex + 1} <button id="${dayId}-${eventIndex}">X</button><hr>
         <div class = "singleEvent">
         <div>
         <b>Title:</b> ${singleEvent.title}<br>
@@ -119,43 +123,43 @@ export const renderEvents = (events, dayId) => {
         </div>
     `;
         dayEventsDiv.insertAdjacentHTML('beforeend', singleEventRender);
-        document.getElementById(`${i}${dayId}`).onclick = deleteClicked;
+        document.getElementById(`${dayId}-${eventIndex}`).onclick = deleteClicked;
     }
 }
 
 // listners
 
 const changeMonth = () => {
-    const prevMonthButton = document.getElementById("prevMonth"),
-        nextMonthButton = document.getElementById("nextMonth"),
-        currMonthButton = document.getElementById("currMonth");
+    const prevMonthButton = document.getElementById("prevMonthBtn"),
+        nextMonthButton = document.getElementById("nextMonthBtn"),
+        currMonthButton = document.getElementById("currMonthBtn");
 
     prevMonthButton.addEventListener('click', () => {
         dayEventsDiv.style.visibility = 'hidden';
-        dispatchEvent(new CustomEvent('prevMonth-clicked', {
+        dispatchEvent(new CustomEvent('prevMonthBtn-clicked', {
             bubbles: true,
         }));
     })
     nextMonthButton.addEventListener('click', () => {
         dayEventsDiv.style.visibility = 'hidden';
-        dispatchEvent(new CustomEvent('nextMonth-clicked', {
+        dispatchEvent(new CustomEvent('nextMonthBtn-clicked', {
             bubbles: true,
         }));
     })
     currMonthButton.addEventListener('click', () => {
         dayEventsDiv.style.visibility = 'hidden';
-        dispatchEvent(new CustomEvent('currMonth-clicked', {
+        dispatchEvent(new CustomEvent('currMonthBtn-clicked', {
             bubbles: true,
         }));
     })
 }
 changeMonth();
 
-const addEventSubmit = () => {
+const addEvent = () => {
     const addEventDiv = document.getElementById("addEvent");
     document.getElementById(`addEventBtn`).onclick = () => {
         addEventDiv.style.visibility = 'visible';
-        const defaultData = pointedDay.id.toString().replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
+        const defaultData = pointedDay.id.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
         document.getElementById("eventDate").value = defaultData;
     };
 
@@ -179,24 +183,26 @@ const addEventSubmit = () => {
         addEventDiv.style.visibility = 'hidden';
     };
 }
-addEventSubmit();
+addEvent();
 
 const deleteClicked = (event) => {
+    const id = event.currentTarget.id.split("-");
     dispatchEvent(new CustomEvent('specificDayDelete-clicked', {
-        detail: { eventId: event.currentTarget.id },
+        detail: {
+            dayId: parseInt(id[0]),
+            eventIndex: parseInt(id[1])
+        },
     }));
 }
 
 const dayClicked = (event) => {
-    if (parseInt(event.currentTarget.id) % 100 == 0) {
-        return;
-    }
+    const dayId = parseInt(event.currentTarget.id);
     pointedDay.className = "calendarDay";
-    pointedDay = document.getElementById(parseInt(event.currentTarget.id));
+    pointedDay = document.getElementById(dayId);
     pointedDay.className = pointedDay.className + " currentPointed";
     dayEventsDiv.style.visibility = 'visible';
 
     dispatchEvent(new CustomEvent('specificDay-clicked', {
-        detail: { dayNumber: event.currentTarget.id },
+        detail: { dayNumber: dayId },
     }));
 }
