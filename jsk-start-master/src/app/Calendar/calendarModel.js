@@ -1,9 +1,8 @@
 import { Calendar } from "calendar"
 import * as data from "./data"
+import * as calendarConst from "./calendarConst"
 
 const FIRST_DAY = 1;
-const ID_YEAR_FACTOR = 1e4;
-const ID_MONTH_FACTOR = 1e2;
 
 if (localStorage == null) {
     data.initDataBase();
@@ -32,9 +31,9 @@ export const getEvents = (year, month) => {
     validateMonth(month);
 
     let allEventsInMonth = new Map();
-    let monthId = year * ID_YEAR_FACTOR + (month) * ID_MONTH_FACTOR;
+    let monthId = year * calendarConst.ID_YEAR_FACTOR + (month) * calendarConst.ID_MONTH_FACTOR;
     for (var i = 0; i < localStorage.length; i++) {
-        if (monthId / ID_MONTH_FACTOR == Math.trunc(localStorage.key(i) / ID_MONTH_FACTOR)) {
+        if (monthId / calendarConst.ID_MONTH_FACTOR == Math.trunc(localStorage.key(i) / calendarConst.ID_MONTH_FACTOR)) {
             allEventsInMonth.set(parseInt(localStorage.key(i)), JSON.parse(localStorage.getItem(localStorage.key(i))));
         }
     }
@@ -51,9 +50,9 @@ export const deleteEvent = (dayId, eventIndex) => {
 }
 
 export const addEvent = (dayId, event) => {
-    validateYear(Math.trunc(dayId / ID_YEAR_FACTOR));
-    validateMonth(Math.trunc(dayId / ID_MONTH_FACTOR) % ID_MONTH_FACTOR);
-    validateDay(dayId % ID_MONTH_FACTOR);
+    validateYear(Math.trunc(dayId / calendarConst.ID_YEAR_FACTOR));
+    validateMonth(Math.trunc(dayId / calendarConst.ID_MONTH_FACTOR) % calendarConst.ID_MONTH_FACTOR);
+    validateDay(dayId % calendarConst.ID_MONTH_FACTOR);
 
     if (event.title == null || event.title == '') {
         throw new Error('TitleFieldIsEmpty');

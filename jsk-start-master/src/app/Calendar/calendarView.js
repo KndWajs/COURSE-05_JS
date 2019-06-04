@@ -1,6 +1,4 @@
-const DIFF_BETWEEN_JS_AND_HUMAN_MONTH = 1;
-const ID_YEAR_FACTOR = 1e4;
-const ID_MONTH_FACTOR = 1e2;
+import * as calendarConst from "./calendarConst"
 
 const calendarDiv = document.getElementById("calendar");
 const dayEventsDiv = document.getElementById("dayEvents");
@@ -59,7 +57,7 @@ export const renderApproachEvents = (todayEvents, tomorrowEvents) => {
 
     const todayTitle = 'Today events';
     renderSimplifiedEventView(todayTitle, todayEvents, todayEventsDiv);
-    
+
     const tomorrowTitle = 'Tomorrow events';
     renderSimplifiedEventView(tomorrowTitle, tomorrowEvents, tomorrowEventsDiv);
 }
@@ -67,8 +65,8 @@ export const renderApproachEvents = (todayEvents, tomorrowEvents) => {
 export const renderCalendar = (calendar, year, month, events) => {
     calendarDiv.innerHTML = '';
     createCalendarDayNames();
-    const preparedDayId = year * ID_YEAR_FACTOR + month * ID_MONTH_FACTOR;
-    let monthWeeks = calendar.monthDays(year, month - DIFF_BETWEEN_JS_AND_HUMAN_MONTH);
+    const preparedDayId = year * calendarConst.ID_YEAR_FACTOR + month * calendarConst.ID_MONTH_FACTOR;
+    let monthWeeks = calendar.monthDays(year, month - calendarConst.DIFF_BETWEEN_JS_AND_HUMAN_MONTH);
     for (const week of monthWeeks) {
         const weekElement = document.createElement("div");
         weekElement.className = 'calendarWeek';
@@ -86,7 +84,7 @@ export const renderCalendar = (calendar, year, month, events) => {
         }
         calendarDiv.appendChild(weekElement);
     }
-    if (year == new Date().getFullYear() && month == new Date().getMonth() + DIFF_BETWEEN_JS_AND_HUMAN_MONTH) {
+    if (year == new Date().getFullYear() && month == new Date().getMonth() + calendarConst.DIFF_BETWEEN_JS_AND_HUMAN_MONTH) {
         const currentDay = document.getElementById(preparedDayId + new Date().getDate());
         currentDay.style.borderColor = 'black';
         pointedDay = currentDay;

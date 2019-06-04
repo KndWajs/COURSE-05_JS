@@ -53,5 +53,3 @@ export const initDataBase = () => {
     localStorage.setItem(date4, JSON.stringify([sampleEvent4]));
     localStorage.setItem(date5, JSON.stringify([sampleEvent5, sampleEvent6]));
 }
-
-

@@ -1,16 +1,12 @@
 import * as model from "./calendarModel"
 import * as view from "./calendarView"
+import * as calendarConst from "./calendarConst"
 
-const DIFF_BETWEEN_JS_AND_HUMAN_MONTH = 1;
 const LAST_MONTH_NUMBER = 12;
 const FIRST_MONTH_NUMBER = 1;
-const ID_YEAR_FACTOR = 1e4;
-const ID_MONTH_FACTOR = 1e2;
-
-
 
 const currentYear = new Date().getFullYear();
-const currentMonth = new Date().getMonth() + DIFF_BETWEEN_JS_AND_HUMAN_MONTH;
+const currentMonth = new Date().getMonth() + calendarConst.DIFF_BETWEEN_JS_AND_HUMAN_MONTH;
 const currentDay = new Date().getDate();
 
 
@@ -40,7 +36,7 @@ const updateView = (visibleYear, visibleMonth) => {
 }
 
 const renderApproachEvents = () => {
-    const dayId = currentYear * ID_YEAR_FACTOR + currentMonth * ID_MONTH_FACTOR + currentDay;
+    const dayId = currentYear * calendarConst.ID_YEAR_FACTOR + currentMonth * calendarConst.ID_MONTH_FACTOR + currentDay;
     const todayEvents = events.get(dayId);
     const tomorrowEvents = events.get(dayId + 1);
     view.renderApproachEvents(todayEvents, tomorrowEvents);
